@@ -60,7 +60,16 @@ That's why the private key is so large (4096 bits).
 It also uses AES256 for its encryption.
 **Preferably, you should create this certificate in some air-gapped machine or something similar.**
 
-### Steps
+### With scripts
+
+1. Create a new directory in a secure machine where you want to store your Root CA certificate
+2. Copy `createRootCA.sh` into that directory
+3. Create a sub-directory `CA` and copy `openssl.cnf` under that
+4. **IMPORTANT!** At least update the row `dir` and match it to your current directory, and preferably update the defaults
+5. Run `./createRootCA.sh` and follow any instructions given
+6. **Done!**
+
+### Manually
 
 Create necessary folders:
 ```
