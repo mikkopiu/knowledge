@@ -111,3 +111,73 @@ Email Address []:
 ```
 
 The certificate should be able to be read by anyone, but not written over by anyone, hence `chmod 444`.
+
+## Creating an Intermediate Certificate Authority
+
+### Steps
+
+Create a directory for the intermediate CA under the directory you created for the Root CA, and create the database files like with the Root CA:
+```
+[me@machine CA]# mkdir intermediate
+[me@machine CA]# cd intermediate/
+[me@machine intermediate]# mkdir certs crl csr newcerts private
+[me@machine intermediate]# chmod 700 private
+[me@machine intermediate]# touch index.txt
+[me@machine intermediate]# echo 1000 > serial
+```
+
+Next create another `openssl.cnf` file under the current directory (`intermediate`).
+
+Generate a private key for the intermediate CA, again with decent security as this key is mostly used to sign things => no performance loss anywhere:
+```
+[me@machine intermediate]# cd ..
+[me@machine CA]# openssl genrsa -aes256 -out intermediate/private/intermediateCA.key.pem 4096
+[me@machine CA]# chmod 400 intermediate/private/intermediateCA.key.pem 
+```
+
+Create a Certificate Signing Request (CSR) with the new private key:
+
+**NOTE:** Common Name here is "MyOrganisation Intermediate CA".
+```
+[me@machine CA]# openssl req -config intermediate/openssl.cnf -new -sha256 -key intermediate/private/intermediateCA.key.pem -out intermediate/csr/intermediateCA.csr.pem
+Country Name (2 letter code) [FI]:
+State or Province Name [Uusimaa]:
+Locality Name [Helsinki]:
+Organization Name [MyOrganisation]:
+Organizational Unit Name [MyUnit]:
+Common Name []:MyOrganisation Intermediate CA
+Email Address []:
+```
+
+The signing request can then be used to create the actual certificate for the intermediate CA.
+**NOTE:** You should now be in the `CA` directory to reference the *Root CA's* configuration file
+instead of the intermediate one (the configuration sets the intermediate certificate to be signed by &
+added to the Root CA's certificate database). The `-extensions v3_intermediate_ca` gives this certificate slightly less rights
+than the Root CA (see the configuration file for more info).
+```
+[me@machine CA]# openssl ca -config openssl.cnf -extensions v3_intermediate_ca -days 1825 -notext -md sha256 -in intermediate/csr/intermediateCA.csr.pem -out intermediate/certs/intermediateCA.cert.pem
+[me@machine CA]# chmod 444 intermediate/certs/intermediateCA.cert.pem 
+```
+
+You can the verify that you have a working certificate, CSR and keys with:
+```
+openssl verify -CAfile certs/CA.cert.pem intermediate/certs/intermediateCA.cert.pem
+openssl req -text -noout -verify -in intermediate/csr/intermediateCA.csr
+openssl rsa -in intermediate/private/intermediateCA.key.pem -check
+```
+
+Finally, you should create a certificate chain file that, as the name suggests, contains the Root CA and the Intermediate CA certificates. This file is then given to e.g. Apache to use as the CA certificate.
+```
+[me@machine CA]# cat intermediate/certs/intermediateCA.cert.pem certs/CA.cert.pem > intermediate/certs/CA-chain.cert.pem
+[me@machine CA]# chmod 444 intermediate/certs/CA-chain.cert.pem 
+```
+
+### Revoking an Intermediate Certificate
+
+**WARNING!** Revoking a certificate is final! You should only do this if you are certain the certificate (or certificates signed with it) is at risk or is no longer valid.
+
+#### Manual method (generalized)
+
+1. Locate your OpenSSL configuration file (or refer to OpenSSL's manual to set all necessary options for revoking a certificate from a CA)
+2. Locate the intermediate CA's certificate you want to revoke
+3. Run `openssl ca -config my-openssl.cnf -revoke my-Intermediate.cert.pem`
