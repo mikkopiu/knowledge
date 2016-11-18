@@ -65,7 +65,7 @@ It also uses AES256 for its encryption.
 1. Create a new directory in a secure machine where you want to store your Root CA certificate
 2. Copy `createRootCA.sh` into that directory
 3. Create a sub-directory `CA` and copy `openssl.cnf` under that
-4. **IMPORTANT!** At least update the row `dir` and match it to your current directory, and preferably update the defaults
+4. **IMPORTANT!** Update at least the row `dir` and match it to your current directory, and preferably update the defaults
 5. Run `./createRootCA.sh` and follow any instructions given
 6. **Done!**
 
@@ -115,6 +115,16 @@ The certificate should be able to be read by anyone, but not written over by any
 ## Creating an Intermediate Certificate Authority
 
 ### Steps
+
+#### With scripts
+
+1. Copy `createIntermediateCA.sh` into the same certificate directory you copied the previous script
+2. Create a sub-directory `CA/intermediate` and copy `openssl.intermediate.cnf` as `openssl.cnf` under that
+3. **IMPORTANT!** Update at least the row `dir` and match it to your current directory, and preferably update the defaults
+4. Run `./createIntermediateCA.sh` and follow any instructions given
+5. **Done!**
+
+#### Manually method
 
 Create a directory for the intermediate CA under the directory you created for the Root CA, and create the database files like with the Root CA:
 ```
@@ -181,3 +191,65 @@ Finally, you should create a certificate chain file that, as the name suggests, 
 1. Locate your OpenSSL configuration file (or refer to OpenSSL's manual to set all necessary options for revoking a certificate from a CA)
 2. Locate the intermediate CA's certificate you want to revoke
 3. Run `openssl ca -config my-openssl.cnf -revoke my-Intermediate.cert.pem`
+
+## Creating a server certificate
+
+### Notes
+
+These certificates are the lowest level certificates along user certificates.
+These certificates cannot be used to further sign any new certificates and should only be used to identify servers
+as trusted by their Certificate Authorities, here MyOrganisation Intermediate CA (and Root CA).
+These are also the ones given to your web server (e.g. Apache) to use as its server certificate, enabling HTTPS connections.
+
+### Steps
+
+#### With scripts
+
+1. Copy `createServerCert.sh` into the same certificate directory you copied the previous scripts
+2. Run `./createServerCert.sh` and follow any instructions given
+  - The Common Name for the server certificate must match the address that is used to connect to the server (e.g. its domain name or IP)
+3. **Done!**
+
+You are now ready to install the certificate into your server.
+
+#### Manually
+
+Private keys:
+```
+[me@machine CA]# openssl genrsa -aes256 -out intermediate/private/myServer.key.pem 2048
+[me@machine CA]# chmod 400 intermediate/private/myServer.key.pem 
+```
+
+CSR:
+```
+[me@machine CA]# openssl req -config intermediate/openssl.cnf -key intermediate/private/myServer.key.pem -new -sha256 -out intermediate/csr/myServer.csr.pem
+```
+
+Certificate:
+```
+[me@machine CA]# openssl ca -config intermediate/openssl.cnf -extensions server_cert -days 730 -notext -md sha256 -in intermediate/csr/myServer.csr.pem -out intermediate/certs/myServer.cert.pem
+Country Name (2 letter code) [FI]:
+State or Province Name [Uusimaa]:
+Locality Name [Helsinki]:
+Organization Name [MyOrganisation]:
+Organizational Unit Name [MyUnit]:
+Common Name []:172.21.169.245
+Email Address []:
+
+[me@machine CA]# chmod 444 intermediate/certs/myServer.cert.pem 
+```
+
+Verify (with the CA chain file):
+```
+[me@machine CA]# openssl verify -CAfile intermediate/certs/CA-chain.cert.pem intermediate/certs/myServer.cert.pem 
+intermediate/certs/myServer.cert.pem: OK
+```
+
+### Revoking a server certificate
+
+#### Manual method (general)
+
+1. Locate the OpenSSL configuration file for your CA (or refer to OpenSSL documentation for the necessary options)
+2. Locate the certificate you want to revoke
+3. Run `openssl  ca -config path/to/openssl.cnf -revoke /path/to/file`
+4. You can now rename/delete the old certificate file
