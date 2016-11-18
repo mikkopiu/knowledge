@@ -266,13 +266,16 @@ intermediate/certs/myServer.cert.pem: OK
 
 These certificates are used to authenticate users and applications into servers that trust the Root CA (e.g. Apache).
 
-#### Automatic steps
+#### With scripts
 
-1. `CLIENT_NAME=my-client sh createClientCert.sh` and answer all prompts
-2. Set a descriptive Common Name (e.g. User Alpha Beta xyz123)
-3. Leave email, challenge password and optional company fields empty for the CSR, unless required
 
-#### Manual steps
+1. Copy `createClientCert.sh` into the same certificate directory you copied the previous scripts
+2. Run `CLIENT_NAME=my-client sh createClientCert.sh` and follow any instructions given
+  - Set a descriptive Common Name (e.g. User Alpha Beta xyz123)
+  - Leave email, challenge password and optional company fields empty for the CSR, unless required
+3. **Done!**
+
+#### Manually
 
 1. Private key: `openssl genrsa -aes256 -out user/my-client/my-client.key.pem 2048` & `chmod 400 user/my-client/my-client.key.pem`
 2. CSR: `openssl req -config CA/intermediate/openssl.cnf -key user/my-client/my-client.key.pem -new -sha256 -out user/my-client/my-client.csr.pem`
