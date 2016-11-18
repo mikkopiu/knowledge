@@ -112,11 +112,13 @@ Email Address []:
 
 The certificate should be able to be read by anyone, but not written over by anyone, hence `chmod 444`.
 
-## Creating an Intermediate Certificate Authority
+## Intermediate Certificate Authority
 
-### Steps
+### Creating an Intermediate Certificate Authority
 
-#### With scripts
+#### Steps
+
+##### With scripts
 
 1. Copy `createIntermediateCA.sh` into the same certificate directory you copied the previous script
 2. Create a sub-directory `CA/intermediate` and copy `openssl.intermediate.cnf` as `openssl.cnf` under that
@@ -124,7 +126,7 @@ The certificate should be able to be read by anyone, but not written over by any
 4. Run `./createIntermediateCA.sh` and follow any instructions given
 5. **Done!**
 
-#### Manually method
+##### Manually method
 
 Create a directory for the intermediate CA under the directory you created for the Root CA, and create the database files like with the Root CA:
 ```
@@ -192,18 +194,20 @@ Finally, you should create a certificate chain file that, as the name suggests, 
 2. Locate the intermediate CA's certificate you want to revoke
 3. Run `openssl ca -config my-openssl.cnf -revoke my-Intermediate.cert.pem`
 
-## Creating a server certificate
+## Server certificates
 
-### Notes
+### Creating a server certificate
+
+#### Notes
 
 These certificates are the lowest level certificates along user certificates.
 These certificates cannot be used to further sign any new certificates and should only be used to identify servers
 as trusted by their Certificate Authorities, here MyOrganisation Intermediate CA (and Root CA).
 These are also the ones given to your web server (e.g. Apache) to use as its server certificate, enabling HTTPS connections.
 
-### Steps
+#### Steps
 
-#### With scripts
+##### With scripts
 
 1. Copy `createServerCert.sh` into the same certificate directory you copied the previous scripts
 2. Run `SERVER_NAME=my-server sh createServerCert.sh` and follow any instructions given
@@ -212,7 +216,7 @@ These are also the ones given to your web server (e.g. Apache) to use as its ser
 
 You are now ready to install the certificate into your server.
 
-#### Manually
+##### Manually
 
 Private keys:
 ```
@@ -253,3 +257,29 @@ intermediate/certs/myServer.cert.pem: OK
 2. Locate the certificate you want to revoke
 3. Run `openssl  ca -config path/to/openssl.cnf -revoke /path/to/file`
 4. You can now rename/delete the old certificate file
+
+## User certificates
+
+### Creating a new user certificate
+
+#### Notes
+
+These certificates are used to authenticate users and applications into servers that trust the Root CA (e.g. Apache).
+
+#### Automatic steps
+
+1. `CLIENT_NAME=my-client sh createClientCert.sh` and answer all prompts
+2. Set a descriptive Common Name (e.g. User Alpha Beta xyz123)
+3. Leave email, challenge password and optional company fields empty for the CSR, unless required
+
+#### Manual steps
+
+1. Private key: `openssl genrsa -aes256 -out user/my-client/my-client.key.pem 2048` & `chmod 400 user/my-client/my-client.key.pem`
+2. CSR: `openssl req -config CA/intermediate/openssl.cnf -key user/my-client/my-client.key.pem -new -sha256 -out user/my-client/my-client.csr.pem`
+3. Certificate: `openssl ca -config intermediate/openssl.cnf -extensions usr_cert -days 730 -notext -md sha256 -in user/my-client/my-client.csr.pem -out user/my-client/my-client.cert.pem` & `chmod 444 user/my-client/my-client.cert.pem`
+4. Verify: `openssl verify -CAfile CA/intermediate/certs/CA-chain.cert.pem user/my-client/my-client.cert.pem`
+5. Optionally, create a P12 file for Chrome & Firefox installation: `openssl pkcs12 -export -clcerts -in user/my-client/my-client.cert.pem -inkey user/my-client/my-client.key.pem -out user/my-client/my-client.p12`
+
+### Revoking a user certificate
+
+Refer to the instructions for revoking server certificates: [Revoking a server certificate](Server-certificates#revoking-a-server-certificate)
