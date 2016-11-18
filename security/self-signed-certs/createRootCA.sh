@@ -4,10 +4,7 @@ set -o xtrace errexit
 
 # Create CA directories
 # and set necessary file permissions.
-mkdir -p ./CA/certs
-mkdir -p ./CA/crl
-mkdir -p ./CA/newcerts
-mkdir -p ./CA/private
+mkdir -p CA/certs CA/crl CA/newcerts CA/private
 cd CA
 chmod 700 private
 
