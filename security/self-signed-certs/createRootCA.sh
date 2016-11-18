@@ -15,7 +15,7 @@ chmod 700 private
 touch index.txt
 echo 1000 > serial
 
-if [ -f ./openssl.cnf ];
+if [ ! -f ./openssl.cnf ];
 then
     echo 'openssl.cnf is missing, please add it in the CA directory'
     exit 1
