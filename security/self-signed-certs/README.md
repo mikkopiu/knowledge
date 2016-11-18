@@ -206,7 +206,7 @@ These are also the ones given to your web server (e.g. Apache) to use as its ser
 #### With scripts
 
 1. Copy `createServerCert.sh` into the same certificate directory you copied the previous scripts
-2. Run `./createServerCert.sh` and follow any instructions given
+2. Run `SERVER_NAME=my-server sh createServerCert.sh` and follow any instructions given
   - The Common Name for the server certificate must match the address that is used to connect to the server (e.g. its domain name or IP)
 3. **Done!**
 
