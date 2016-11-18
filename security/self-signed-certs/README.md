@@ -1,5 +1,7 @@
 # Self-signed SSL certificates
 
+## Info
+
 Heavily based on these wonderful instructions: https://jamielinux.com/docs/openssl-certificate-authority/index.html
 
 Root CA is the one you should add as your trusted Root CA in e.g. your browser.
@@ -32,3 +34,12 @@ Basic structure of the generated certificates:
 +---------------+         +-------------------+
 ```
 
+### Directory structure
+
+```shell
+[me@machine dir]$ ls -lR
+.:
+drwxr-xr-x. 7 me me 4096 31.5. 16:21 CA        <== Root CA & Intermediate CA
+drwxr-xr-x. 2 me me 4096 31.5. 16:07 server    <== Server certs
+drwxr-xr-x. 6 me me   89 31.5. 11:17 user      <== User certs
+```
