@@ -25,7 +25,10 @@ echo "Generated certificate in $CERT_DIR"
 
 printf "+==========================================
 + SSL Certificate created
-+ Use it like this in your nginx config:
++
++ Copy the files in $CERT_DIR into your desired path,
++ e.g. for nginx it might be: /etc/nginx/ssl and
++ use it like this in your nginx config:
 +==========================================\n\n
 ssl_certificate		/path/to/certs/$CERT_FNAME.crt
 ssl_certificate_key	/path/to/certs/$CERT_FNAME.key.pem
