@@ -11,10 +11,10 @@ openssl genrsa -aes256 -out user/${CLIENT_NAME}/${CLIENT_NAME}.key.pem 2048
 chmod 400 user/${CLIENT_NAME}/${CLIENT_NAME}.key.pem
 
 echo "Generating a Certificate Signing Request"
-openssl req -config saviCA/intermediate/openssl.cnf -key user/${CLIENT_NAME}/${CLIENT_NAME}.key.pem -new -sha256 -out user/${CLIENT_NAME}/${CLIENT_NAME}.csr.pem
+openssl req -config CA/intermediate/openssl.cnf -key user/${CLIENT_NAME}/${CLIENT_NAME}.key.pem -new -sha256 -out user/${CLIENT_NAME}/${CLIENT_NAME}.csr.pem
 
 echo "Generating certificate file"
-openssl ca -config saviCA/intermediate/openssl.cnf -extensions usr_cert -days 730 -notext -md sha256 -in user/${CLIENT_NAME}/${CLIENT_NAME}.csr.pem -out user/${CLIENT_NAME}/${CLIENT_NAME}.cert.pem
+openssl ca -config CA/intermediate/openssl.cnf -extensions usr_cert -days 730 -notext -md sha256 -in user/${CLIENT_NAME}/${CLIENT_NAME}.csr.pem -out user/${CLIENT_NAME}/${CLIENT_NAME}.cert.pem
 chmod 444 user/${CLIENT_NAME}/${CLIENT_NAME}.cert.pem
 
 echo "Generating P12-file for Chrome installation"
