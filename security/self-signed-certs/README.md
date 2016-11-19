@@ -81,7 +81,7 @@ openssl rsa -in server.key.pem.orig -out server.key.pem
 
 Make the private key only readable by you
 ```shell
-chmod 400 $CERT_FNAME.key.pem*
+chmod 400 server.key.pem*
 ```
 
 Generate a Certificate Signing Request
