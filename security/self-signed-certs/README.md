@@ -48,7 +48,7 @@ drwxr-xr-x. 2 me me 4096 31.5. 16:07 server    <== Server certs
 drwxr-xr-x. 6 me me   89 31.5. 11:17 user      <== User certs
 ```
 
-## Creating a unsecure server certificate
+## Creating an unsecure server certificate
 
 ### Notes
 
