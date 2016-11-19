@@ -48,6 +48,24 @@ drwxr-xr-x. 2 me me 4096 31.5. 16:07 server    <== Server certs
 drwxr-xr-x. 6 me me   89 31.5. 11:17 user      <== User certs
 ```
 
+## Creating a unsecure server certificate
+
+### Notes
+
+**This method is not recommended for any serious use, as it strips out the pass phrase from the private key and does not use any Certificate Authority, removing your ability to revoke the certificate!**
+
+Only use this for things like testing HTTPS on your demo web server. Or if your really know what you are doing, update the script to not remove the pass phrase and pass it to your web server in some secure manner.
+
+### Steps
+
+#### By script
+
+```shell
+./createSimplifiedServerCert.sh
+```
+
+and follow any instructions given. **Remember to set a valid Common Name (e.g. matching the address you will be connecting to your web server).**
+
 ## Creating a Root Certificate Authority (CA)
 
 ### Notes
@@ -174,7 +192,7 @@ than the Root CA (see the configuration file for more info).
 You can the verify that you have a working certificate, CSR and keys with:
 ```
 openssl verify -CAfile certs/CA.cert.pem intermediate/certs/intermediateCA.cert.pem
-openssl req -text -noout -verify -in intermediate/csr/intermediateCA.csr
+openssl req -text -noout -verify -in intermediate/csr/intermediateCA.csr.pem
 openssl rsa -in intermediate/private/intermediateCA.key.pem -check
 ```
 
