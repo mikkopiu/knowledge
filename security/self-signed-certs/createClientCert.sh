@@ -1,8 +1,9 @@
 #!/bin/sh
-set -o xtrace errexit nounset
+set -o xtrace ; set -o errexit ; set -o nounset
 
 : "${CLIENT_NAME:?CLIENT_NAME missing! Usage: \"CLIENT_NAME=my-client sh createClientCert.sh\"}"
 
+# Assume we are in the root certificate directory
 echo "Creating directory user/${CLIENT_NAME}"
 mkdir user/${CLIENT_NAME}
 

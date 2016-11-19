@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -o xtrace errexit nounset
+set -o xtrace ; set -o errexit ; set -o nounset
 
 : "${SERVER_NAME:?SERVER_NAME missing! Usage: \"SERVER_NAME=my-server sh createAllCerts.sh\"}"
 

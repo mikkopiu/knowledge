@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -o xtrace errexit
+set -o xtrace ; set -o errexit
 
 # Create CA directories
 # and set necessary file permissions.
@@ -27,4 +27,5 @@ chmod 400 private/CA.key.pem
 openssl req -config openssl.cnf -key private/CA.key.pem -new -x509 -days 3650 -sha256 -extensions v3_ca -out certs/CA.cert.pem
 chmod 444 certs/CA.cert.pem
 
+cd ..
 echo 'Done'
