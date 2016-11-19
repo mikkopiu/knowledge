@@ -1,2 +1,3 @@
 # Knowledge
-Some random resources and links
+
+Some random resources, guides and links
