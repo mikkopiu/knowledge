@@ -10,6 +10,11 @@
 - [Docker Garbace Collection](https://github.com/spotify/docker-gc)
 - [Clean up volumes](https://github.com/chadoe/docker-cleanup-volumes)
 
+## Orchestration
+
+- [Kontena](https://kontena.io/)
+  - Higher level take on Docker container orchestration
+
 ## Miscellaneous
 
 ### Remove unused images
