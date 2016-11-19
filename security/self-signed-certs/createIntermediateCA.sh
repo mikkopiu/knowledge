@@ -22,14 +22,14 @@ fi
 FNAME="intermediateCA"
 
 # Generate the private key
-cd ..
-openssl genrsa -aes256 -out intermediate/private/$FNAME.key.pem 4096
-chmod 400 intermediate/private/$FNAME.key.pem 
+openssl genrsa -aes256 -out private/$FNAME.key.pem 4096
+chmod 400 private/$FNAME.key.pem 
 
 # Create a new CSR
-openssl req -config intermediate/openssl.cnf -new -sha256 -key intermediate/private/$FNAME.key.pem -out intermediate/csr/$FNAME.csr.pem
+openssl req -config openssl.cnf -new -sha256 -key private/$FNAME.key.pem -out csr/$FNAME.csr.pem
 
 # Then sign a certificate with that CSR
+cd ..
 openssl ca -config openssl.cnf -extensions v3_intermediate_ca -days 1825 -notext -md sha256 -in intermediate/csr/$FNAME.csr.pem -out intermediate/certs/$FNAME.cert.pem
 chmod 444 intermediate/certs/$FNAME.cert.pem
 

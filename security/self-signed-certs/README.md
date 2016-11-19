@@ -1,4 +1,4 @@
-# Self-signed SSL certificates
+# Self-signed SSL certificates and Certificate Authorities
 
 **NOTE: You should not take this as some end-all best practices guide! Instead, familiarize yourself with the subject before actually following any advice given here. All of this information is based on my personal knowledge at the time of writing.**
 
@@ -48,7 +48,7 @@ drwxr-xr-x. 2 me me 4096 31.5. 16:07 server    <== Server certs
 drwxr-xr-x. 6 me me   89 31.5. 11:17 user      <== User certs
 ```
 
-## Creating an unsecure server certificate
+## Create an unsecure server certificate
 
 ### Notes
 
@@ -100,7 +100,7 @@ ssl_certificate		/path/to/certs/server.crt
 ssl_certificate_key	/path/to/certs/server.key.pem
 ```
 
-## Creating a Root Certificate Authority (CA)
+## Create a Root Certificate Authority (CA)
 
 ### Notes
 
@@ -166,7 +166,7 @@ The certificate should be able to be read by anyone, but not written over by any
 
 ## Intermediate Certificate Authority
 
-### Creating an Intermediate Certificate Authority
+### Create an Intermediate Certificate Authority
 
 #### Steps
 
@@ -248,7 +248,7 @@ chmod 444 intermediate/certs/CA-chain.cert.pem
 
 ## Server certificates
 
-### Creating a server certificate
+### Create a server certificate
 
 #### Notes
 
@@ -312,7 +312,7 @@ intermediate/certs/myServer.cert.pem: OK
 
 ## User certificates
 
-### Creating a new user certificate
+### Create a new user certificate
 
 #### Notes
 
