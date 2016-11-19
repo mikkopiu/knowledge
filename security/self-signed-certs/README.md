@@ -125,24 +125,24 @@ It also uses AES256 for its encryption.
 
 Create necessary folders:
 ```
-[me@machine dir]# mkdir CA
-[me@machine dir]# cd CA/
-[me@machine CA]# mkdir certs crl newcerts private
-[me@machine CA]# chmod 700 private
+mkdir CA
+cd CA/
+mkdir certs crl newcerts private
+chmod 700 private
 ```
 
 The `index.txt` and `serial` files act as a flat file database to keep track of signed certificates.
 ```
-[me@machine CA]# touch index.txt
-[me@machine CA]# echo 1000 > serial
+touch index.txt
+echo 1000 > serial
 ```
 
 Copy `openssl.cnf` to `CA` from this repo and update the default values for Country Names, Locations and directories.
 
 Generate a private key:
 ```
-[me@machine CA]# openssl genrsa -aes256 -out private/CA.key.pem 4096
-[me@machine CA]# chmod 400 private/CA.key.pem 
+openssl genrsa -aes256 -out private/CA.key.pem 4096
+chmod 400 private/CA.key.pem 
 ```
 
 Next, create the actual certificate and sign it with the created private key.
@@ -151,7 +151,7 @@ Next, create the actual certificate and sign it with the created private key.
 here we give this certificate the rights to sign certificates, i.e. CA extensions.
 **NOTE:** `[string]` shows the default value for a field, if left empty, like below.
 ```
-[me@machine CA]# openssl req -config openssl.cnf -key private/CA.key.pem -new -x509 -days 3650 -sha256 -extensions v3_ca -out certs/CA.cert.pem
+openssl req -config openssl.cnf -key private/CA.key.pem -new -x509 -days 3650 -sha256 -extensions v3_ca -out certs/CA.cert.pem
 Country Name (2 letter code) [FI]:
 State or Province Name [Uusimaa]:
 Locality Name [Helsinki]:
@@ -159,7 +159,7 @@ Organization Name [MyOrganisation]:
 Organizational Unit Name [MyUnit]:
 Common Name []:MyOrganisation Root CA
 Email Address []:
-[me@machine CA]# chmod 444 certs/CA.cert.pem
+chmod 444 certs/CA.cert.pem
 ```
 
 The certificate should be able to be read by anyone, but not written over by anyone, hence `chmod 444`.
@@ -182,28 +182,28 @@ The certificate should be able to be read by anyone, but not written over by any
 
 Create a directory for the intermediate CA under the directory you created for the Root CA, and create the database files like with the Root CA:
 ```
-[me@machine CA]# mkdir intermediate
-[me@machine CA]# cd intermediate/
-[me@machine intermediate]# mkdir certs crl csr newcerts private
-[me@machine intermediate]# chmod 700 private
-[me@machine intermediate]# touch index.txt
-[me@machine intermediate]# echo 1000 > serial
+mkdir intermediate
+cd intermediate/
+mkdir certs crl csr newcerts private
+chmod 700 private
+touch index.txt
+echo 1000 > serial
 ```
 
 Next create another `openssl.cnf` file under the current directory (`intermediate`).
 
 Generate a private key for the intermediate CA, again with decent security as this key is mostly used to sign things => no performance loss anywhere:
 ```
-[me@machine intermediate]# cd ..
-[me@machine CA]# openssl genrsa -aes256 -out intermediate/private/intermediateCA.key.pem 4096
-[me@machine CA]# chmod 400 intermediate/private/intermediateCA.key.pem 
+cd ..
+openssl genrsa -aes256 -out intermediate/private/intermediateCA.key.pem 4096
+chmod 400 intermediate/private/intermediateCA.key.pem 
 ```
 
 Create a Certificate Signing Request (CSR) with the new private key:
 
 **NOTE:** Common Name here is "MyOrganisation Intermediate CA".
 ```
-[me@machine CA]# openssl req -config intermediate/openssl.cnf -new -sha256 -key intermediate/private/intermediateCA.key.pem -out intermediate/csr/intermediateCA.csr.pem
+openssl req -config intermediate/openssl.cnf -new -sha256 -key intermediate/private/intermediateCA.key.pem -out intermediate/csr/intermediateCA.csr.pem
 Country Name (2 letter code) [FI]:
 State or Province Name [Uusimaa]:
 Locality Name [Helsinki]:
@@ -219,8 +219,8 @@ instead of the intermediate one (the configuration sets the intermediate certifi
 added to the Root CA's certificate database). The `-extensions v3_intermediate_ca` gives this certificate slightly less rights
 than the Root CA (see the configuration file for more info).
 ```
-[me@machine CA]# openssl ca -config openssl.cnf -extensions v3_intermediate_ca -days 1825 -notext -md sha256 -in intermediate/csr/intermediateCA.csr.pem -out intermediate/certs/intermediateCA.cert.pem
-[me@machine CA]# chmod 444 intermediate/certs/intermediateCA.cert.pem 
+openssl ca -config openssl.cnf -extensions v3_intermediate_ca -days 1825 -notext -md sha256 -in intermediate/csr/intermediateCA.csr.pem -out intermediate/certs/intermediateCA.cert.pem
+chmod 444 intermediate/certs/intermediateCA.cert.pem 
 ```
 
 You can the verify that you have a working certificate, CSR and keys with:
@@ -232,8 +232,8 @@ openssl rsa -in intermediate/private/intermediateCA.key.pem -check
 
 Finally, you should create a certificate chain file that, as the name suggests, contains the Root CA and the Intermediate CA certificates. This file is then given to e.g. Apache to use as the CA certificate.
 ```
-[me@machine CA]# cat intermediate/certs/intermediateCA.cert.pem certs/CA.cert.pem > intermediate/certs/CA-chain.cert.pem
-[me@machine CA]# chmod 444 intermediate/certs/CA-chain.cert.pem 
+cat intermediate/certs/intermediateCA.cert.pem certs/CA.cert.pem > intermediate/certs/CA-chain.cert.pem
+chmod 444 intermediate/certs/CA-chain.cert.pem 
 ```
 
 ### Revoking an Intermediate Certificate
@@ -272,18 +272,18 @@ You are now ready to install the certificate into your server.
 
 Private keys:
 ```
-[me@machine CA]# openssl genrsa -aes256 -out intermediate/private/myServer.key.pem 2048
-[me@machine CA]# chmod 400 intermediate/private/myServer.key.pem 
+openssl genrsa -aes256 -out intermediate/private/myServer.key.pem 2048
+chmod 400 intermediate/private/myServer.key.pem 
 ```
 
 CSR:
 ```
-[me@machine CA]# openssl req -config intermediate/openssl.cnf -key intermediate/private/myServer.key.pem -new -sha256 -out intermediate/csr/myServer.csr.pem
+openssl req -config intermediate/openssl.cnf -key intermediate/private/myServer.key.pem -new -sha256 -out intermediate/csr/myServer.csr.pem
 ```
 
 Certificate:
 ```
-[me@machine CA]# openssl ca -config intermediate/openssl.cnf -extensions server_cert -days 730 -notext -md sha256 -in intermediate/csr/myServer.csr.pem -out intermediate/certs/myServer.cert.pem
+openssl ca -config intermediate/openssl.cnf -extensions server_cert -days 730 -notext -md sha256 -in intermediate/csr/myServer.csr.pem -out intermediate/certs/myServer.cert.pem
 Country Name (2 letter code) [FI]:
 State or Province Name [Uusimaa]:
 Locality Name [Helsinki]:
@@ -292,12 +292,12 @@ Organizational Unit Name [MyUnit]:
 Common Name []:172.21.169.245
 Email Address []:
 
-[me@machine CA]# chmod 444 intermediate/certs/myServer.cert.pem 
+chmod 444 intermediate/certs/myServer.cert.pem 
 ```
 
 Verify (with the CA chain file):
 ```
-[me@machine CA]# openssl verify -CAfile intermediate/certs/CA-chain.cert.pem intermediate/certs/myServer.cert.pem 
+openssl verify -CAfile intermediate/certs/CA-chain.cert.pem intermediate/certs/myServer.cert.pem 
 intermediate/certs/myServer.cert.pem: OK
 ```
 
