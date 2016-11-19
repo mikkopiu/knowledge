@@ -66,6 +66,40 @@ Only use this for things like testing HTTPS on your demo web server. Or if your 
 
 and follow any instructions given. **Remember to set a valid Common Name (e.g. matching the address you will be connecting to your web server).**
 
+#### Manually
+
+Generate a private key
+```shell
+openssl genrsa -aes256 -out server.key.pem 2048
+```
+
+**OPTIONAL AND NOT RECOMMENDED**: Strip out the passphrase to use it in your web server. **It is highly recommended that you DO NOT do this, and instead find a method to input the pass phrase into your web server!**
+```shell
+cp server.key.pem server.key.pem.orig
+openssl rsa -in server.key.pem.orig -out server.key.pem
+```
+
+Make the private key only readable by you
+```shell
+chmod 400 $CERT_FNAME.key.pem*
+```
+
+Generate a Certificate Signing Request
+```shell
+openssl req -new -sha256 -key server.key.pem -out server.csr
+```
+
+Generate the actual certificate
+```shell
+openssl x509 -req -days 365 -in server.csr -signkey server.key.pem -out server.crt
+```
+
+And use it in nginx, for example:
+```
+ssl_certificate		/path/to/certs/server.crt
+ssl_certificate_key	/path/to/certs/server.key.pem
+```
+
 ## Creating a Root Certificate Authority (CA)
 
 ### Notes
