@@ -1,5 +1,9 @@
 # Docker
 
+## Guides
+
+- [Automatic reverse proxy for containers](https://github.com/mikkopiu/knowledge/tree/master/docker/auto-proxy)
+
 ## Resources
 
 - [Dockerfile best practices](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)
