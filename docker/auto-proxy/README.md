@@ -14,6 +14,13 @@ When using `docker-compose v2` YAMLs, remember to create & set a Docker network 
 Otherwise a new network is created based on the `docker-compose.yml` and you might not know what network to
 attach your new containers into.
 
+## Self-signing proxy
+
+1. Copy this directory to your machine
+2. Update `docker-compose.self-signing.yml` with your details
+3. If not using a FQDN, update your `/etc/hosts` to contain all your subdomains
+4. `docker-compose -f docker-compose.self-signing.yml up -d`
+
 ## Example
 
 Create new Docker network:
