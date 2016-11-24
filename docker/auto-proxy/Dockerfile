@@ -7,4 +7,4 @@ WORKDIR /cert-app
 ADD . /cert-app/
 RUN chmod +x /cert-app/start.sh
 
-CMD /cert-app/start.sh
+CMD ["/bin/sh", "/cert-app/start.sh"]

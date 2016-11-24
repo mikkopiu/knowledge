@@ -2,7 +2,6 @@ version: '2'
 services:
   nginx-proxy:
     build: .
-    container_name: nginx-proxy
     ports:
       - "80:80"
       - "443:443"
@@ -15,13 +14,11 @@ services:
 
   whoami:
     image: jwilder/whoami
-    container_name: whoami
     environment:
       - VIRTUAL_HOST=whoami.boson.dev.local
 
   test:
     image: jwilder/whoami
-    container_name: test
     environment:
       - VIRTUAL_HOST=test.boson.dev.local
 
