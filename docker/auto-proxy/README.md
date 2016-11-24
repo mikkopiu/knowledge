@@ -18,6 +18,7 @@ attach your new containers into.
 2. Update `docker-compose.self-signing.yml` with your details
 3. If not using a FQDN, update your `/etc/hosts` to contain all your subdomains
 4. `docker-compose -f docker-compose.self-signing.yml up -d`
+5. **OPTIONAL:** If adding more containers outside of the compose-file, check out the Manual example below for notes
 
 ## Manual example
 
