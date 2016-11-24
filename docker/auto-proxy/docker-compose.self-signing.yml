@@ -2,18 +2,16 @@ version: '2'
 services:
   nginx-proxy:
     build: .
-    #image: jwilder/nginx-proxy
     container_name: nginx-proxy
     ports:
       - "80:80"
       - "443:443"
     environment:
       - CERT_VIRTUAL_HOST=boson.dev.local
-      - CERT_PASSWORD=dong
-      - CERT_SUBJ=/C=US/ST=Denial/L=Dong/O=Dis/CN=*.boson.dev.local
+      - CERT_PASSWORD=mySup3rS3cr3tP4ssword
+      - CERT_SUBJ=/C=FI/ST=Uusimaa/L=Espoo/O=Fake Company/CN=*.boson.dev.local
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      #- ./certs:/etc/nginx/certs
 
   whoami:
     image: jwilder/whoami
