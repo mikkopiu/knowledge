@@ -19,7 +19,7 @@ attach your new containers into.
 3. If not using a FQDN, update your `/etc/hosts` to contain all your subdomains
 4. `docker-compose -f docker-compose.self-signing.yml up -d`
 
-## Example
+## Manual example
 
 Create new Docker network:
 ```shell
