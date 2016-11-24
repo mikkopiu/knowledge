@@ -6,8 +6,6 @@ defines a `VIRTUAL_HOST` in their environment.
 
 ## Notes
 
-**TODO:** Add Let's Encrypt support via [docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion).
-
 When using `docker-compose v2` YAMLs, remember to create & set a Docker network to attach to.
 Otherwise a new network is created based on the `docker-compose.yml` and you might not know what network to
 attach your new containers into.
@@ -19,6 +17,10 @@ attach your new containers into.
 3. If not using a FQDN, update your `/etc/hosts` to contain all your subdomains
 4. `docker-compose -f docker-compose.self-signing.yml up -d`
 5. **OPTIONAL:** If adding more containers outside of the compose-file, check out the Manual example below for notes
+
+## Let's Encrypt proxy
+
+See: https://github.com/fatk/docker-letsencrypt-nginx-proxy-companion-examples
 
 ## Manual example
 
