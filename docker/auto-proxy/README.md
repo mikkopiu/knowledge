@@ -36,6 +36,8 @@ docker run -d -e "VIRTUAL_HOST=whoami.domain.com" -e "LETSENCRYPT_HOST=whoami.do
 docker run -d --name gitlab -e "VIRTUAL_HOST=registry.domain.com" -e "LETSENCRYPT_HOST=registry.domain.com" -e "LETSENCRYPT_EMAIL=admin@example.com" gitlab/gitlab-ce
 ```
 - **TODO:** Figure out best practices for this one, and fix the separate containers issue (shouldn't open up a container with full access to the Docker engine socket).
+- **TODO:** Allow multiple ports for single host (e.g. GitLab: 80 for web UI and 22 for Git/SSH)
+  - See: https://github.com/jwilder/nginx-proxy/issues/59#issuecomment-244039377
 
 ## Manual example
 
