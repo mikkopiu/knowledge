@@ -22,6 +22,21 @@ attach your new containers into.
 
 See: https://github.com/fatk/docker-letsencrypt-nginx-proxy-companion-examples
 
+### Notes
+
+- Separate containers don't seem to work out-of-the-box, at least with docker-compose v2 and Docker engine 1.12.x
+- Successfully created domains with these steps (not sure if correct):
+```
+docker run -d -p 80:80 -p 443:443 --name nginx-proxy -v /path/to/certs:/etc/nginx/certs:ro -v /etc/nginx/vhost.d -v /usr/share/nginx/html -v /var/run/docker.sock:/tmp/docker.sock:ro jwilder/nginx-proxy
+
+docker run -d -v /path/to/certs:/etc/nginx/certs:rw --volumes-from nginx-proxy -v /var/run/docker.sock:/var/run/docker.sock:ro jrcs/letsencrypt-nginx-proxy-companion
+
+docker run -d -e "VIRTUAL_HOST=whoami.domain.com" -e "LETSENCRYPT_HOST=whoami.domain.com" -e "LETSENCRYPT_EMAIL=admin@example.com" --name whoami jwilder/whoami
+
+docker run -d --name gitlab -e "VIRTUAL_HOST=registry.domain.com" -e "LETSENCRYPT_HOST=registry.domain.com" -e "LETSENCRYPT_EMAIL=admin@example.com" gitlab/gitlab-ce
+```
+- **TODO:** Figure out best practices for this one, and fix the separate containers issue (shouldn't open up a container with full access to the Docker engine socket).
+
 ## Manual example
 
 Create new Docker network:
