@@ -39,6 +39,7 @@ docker run -d --name gitlab -e "VIRTUAL_HOST=registry.domain.com" -e "LETSENCRYP
 - **TODO:** Allow multiple ports for single host (e.g. GitLab: 80 for web UI and 22 for Git/SSH)
   - See: https://github.com/jwilder/nginx-proxy/issues/59#issuecomment-244039377
   - Update: Probably just expose a different port, outside the proxy and get the domaing trough a "A ALIAS" record: https://github.com/jwilder/nginx-proxy/issues/309#issuecomment-163556850
+    - For Git-servers, one solution could be to change the host's SSH port to some non-default, and run the container on `22` => no need for custom port on requests
 
 ## Manual example
 
