@@ -38,6 +38,7 @@ docker run -d --name gitlab -e "VIRTUAL_HOST=registry.domain.com" -e "LETSENCRYP
 - **TODO:** Figure out best practices for this one, and fix the separate containers issue (shouldn't open up a container with full access to the Docker engine socket).
 - **TODO:** Allow multiple ports for single host (e.g. GitLab: 80 for web UI and 22 for Git/SSH)
   - See: https://github.com/jwilder/nginx-proxy/issues/59#issuecomment-244039377
+  - Update: Probably just expose a different port, outside the proxy and get the domaing trough a "A ALIAS" record: https://github.com/jwilder/nginx-proxy/issues/309#issuecomment-163556850
 
 ## Manual example
 
