@@ -62,7 +62,6 @@ See some tips for improvement below.
     # Add this to DOCKER_OPTS in /etc/default/docker:
     --disable-legacy-registry
     ```
-- ding
 
 ## Miscellaneous
 
