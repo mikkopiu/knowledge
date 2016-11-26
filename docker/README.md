@@ -51,7 +51,10 @@ See some tips for improvement below.
     ```
 
 - Switch to some other storage driver than AUFS
-  - Check this guide out:https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
+  - Check this guide out: https://docs.docker.com/engine/userguide/storagedriver/selectadriver/
+  - Devicemapper might be the best choice currently, but be sure to understand its quirks
+    - https://docs.docker.com/engine/userguide/storagedriver/device-mapper-driver/
+    - At least on older versions of Docker, it constantly failed to release space when data was removed
   - Google for more up-to-date info
 - Disable legacy registries (you really should not be using them, Docker Hub and most non-official registries offer v2 by default):
 
