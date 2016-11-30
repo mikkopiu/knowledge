@@ -2,6 +2,15 @@
 
 Some random notes and guides for AWS.
 
+## EC2
+
+### Provision simple Docker host
+
+1. Create new Ubuntu 16.04 instance
+2. Log in
+3. Run `./provision-simple-docker.sh`
+4. Reboot & done
+
 ## Route 53 (DNS)
 
 - Can buy / register domains
