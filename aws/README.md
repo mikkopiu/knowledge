@@ -2,6 +2,14 @@
 
 Some random notes and guides for AWS.
 
+## CloudFormation
+
+### Templates
+
+Collection of my templates: https://github.com/mikkopiu/aws-cf-templates
+Great infrastructure templates: https://github.com/stelligent/cloudformation_templates
+Official sample templates: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-eu-central-1.html
+
 ## EC2
 
 ### Provision simple Docker host
