@@ -16,7 +16,8 @@ Official sample templates: https://docs.aws.amazon.com/AWSCloudFormation/latest/
   - Scan for insecure patterns in CloudFormation templates, easy to integrate into CI/CD pipelines:
   
       ```sh
-      cfn-nag --print-suppression --input-path mytemplate.yaml
+      gem install cfn-nag
+      cfn_nag_scan --print-suppression --input-path mytemplate.yaml
       ```
 
 ## EC2
