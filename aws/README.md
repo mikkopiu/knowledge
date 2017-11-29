@@ -10,6 +10,15 @@ Collection of my templates: https://github.com/mikkopiu/aws-cf-templates
 Great infrastructure templates: https://github.com/stelligent/cloudformation_templates
 Official sample templates: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/sample-templates-services-eu-central-1.html
 
+### Tools
+
+- cfn_nag: https://github.com/stelligent/cfn_nag
+  - Scan for insecure patterns in CloudFormation templates, easy to integrate into CI/CD pipelines:
+  
+      ```sh
+      cfn-nag --print-suppression --input-path mytemplate.yaml
+      ```
+
 ## EC2
 
 ### Provision simple Docker host
