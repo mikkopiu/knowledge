@@ -31,3 +31,10 @@ sleep 1
 echo -ne 'Loading: ########## (100%)\r'
 echo -ne '\n'
 ```
+
+### Map lines to Bash array
+
+```bash
+mapfile -t my_array < file.txt
+```
+
