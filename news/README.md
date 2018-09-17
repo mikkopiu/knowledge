@@ -15,3 +15,4 @@
 ## Newsletters
 
 - [JavaScript Weekly](http://javascriptweekly.com/)
+- [Morning Cup of Coding](https://www.humanreadablemag.com/morningcupofcoding/)
