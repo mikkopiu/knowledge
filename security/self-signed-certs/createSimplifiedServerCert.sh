@@ -5,6 +5,7 @@ set -o errexit
 echo 'Creating a directory to store the certificate files'
 CERT_DIR="generated-certs"
 CERT_FNAME="$CERT_DIR/serverCert"
+VALID_FOR_DAYS="${VALID_FOR_DAYS:-365}"
 mkdir -p $CERT_DIR
 
 echo 'Generating a private key'
@@ -19,7 +20,7 @@ echo 'Generating a Certificate Signing Request'
 openssl req -new -sha256 -key $CERT_FNAME.key.pem -out $CERT_FNAME.csr
 
 echo 'Generating the actual certificate'
-openssl x509 -req -days 365 -in $CERT_FNAME.csr -signkey $CERT_FNAME.key.pem -out $CERT_FNAME.crt
+openssl x509 -req -days "$VALID_FOR_DAYS" -in $CERT_FNAME.csr -signkey $CERT_FNAME.key.pem -out $CERT_FNAME.crt
 
 echo "Generated certificate in $CERT_DIR"
 
