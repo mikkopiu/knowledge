@@ -38,3 +38,9 @@ echo -ne '\n'
 mapfile -t my_array < file.txt
 ```
 
+### Test TCP connectivity in constrained environments
+
+```sh
+nc -vz <address> <port>
+```
+
