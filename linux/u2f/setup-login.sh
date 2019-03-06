@@ -10,7 +10,7 @@ mkdir -p ~/.config/Yubico
 pamu2fcfg > ~/.config/Yubico/u2f_keys
 
 echo 'Configuring login, via gdm-password...'
-sed '/@include common-auth/a auth\trequired\tpam_u2f.so' /etc/pam.d/gdm-password
+sudo sed -i '/@include common-auth/a auth\trequired\tpam_u2f.so' /etc/pam.d/gdm-password
 
 echo 'Done!'
 
