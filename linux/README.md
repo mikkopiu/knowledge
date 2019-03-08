@@ -17,6 +17,22 @@ or
 set -o errexit # or shorter: set -e
 ```
 
+### lightdm configuration
+
+I.e. when you want to change the default greeter ("login page")
+when using `lightdm`.
+
+The configuration files are located in (on Ubuntu 18.04 LTS at least):
+`/usr/share/lightdm/lightdm.conf.d/`.
+
+For example, using the Patheon greeter might look something like:
+
+```
+[Seat:*]
+greeter-session=io.elementary.greeter
+user-session=pantheon
+```
+
 ## Snippets
 
 ### Create progress bar in shell script
