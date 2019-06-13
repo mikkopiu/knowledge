@@ -54,6 +54,18 @@ echo -ne '\n'
 mapfile -t my_array < file.txt
 ```
 
+### Browse gzipped (log) files
+
+```sh
+zcat /var/log/messages-somedate.gz | less
+```
+
+### List open ports with awk
+
+```sh
+awk 'NR>1' /proc/net/tcp | awk '{x=strtonum("0x"substr($2,index($2,":")-2,2)); for (i=5; i>0; i-=2) x = x"."strtonum("0x"substr($2,i,2))}{print x":"strtonum("0x"substr($2,index($2,":")+1,4))}'
+```
+
 ### Test TCP connectivity in constrained environments
 
 ```sh
