@@ -43,3 +43,10 @@ git checkout our-master
 git rebase master
 popd
 ```
+
+### Delete all merged branches from remote
+
+```sh
+git branch -r --merged | grep -v master | sed 's/origin\//:/' | xargs -n 1 git push origin
+```
+
