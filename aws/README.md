@@ -47,3 +47,26 @@ See [auto-proxy](../docker/auto-proxy)
 5. **OPTIONAL**: Create specific subdomains by creating new `A` records: `sub.domain.com  A  ALIAS domain.com`
 6. In a few minutes (and possibly after flushing your local DNS; Windows seems to be slow to update DNS records)
     you should be able to access your new subdomain (assuming you've set up a webserver with a virtual host pointing to your subdomain).
+
+## S3
+
+### Manually delete objects older than x days
+
+Prefer S3 expirations where possible but here's a quick-and-dirty way to delete all objects recursively that are older than the specified amount of days:
+
+```sh
+BUCKET=<bucket name here>
+DAYS=2
+aws s3 ls --recursive s3://$BUCKET/ | while read -r line; do
+	createDate=$(date -d"$(echo $line|awk {'print $1'})" +%s)
+	olderThan=$(date -d"-$DAYS days" +%s)
+	if [[ $createDate -lt $olderThan ]]; then
+		fileName=$(echo $line|awk {'print $4'})
+		if [[ $fileName != '' ]]; then
+			aws s3 rm s3://$BUCKET/$fileName
+		fi
+	fi
+done
+```
+
+Modified from source: https://shout.setfive.com/2011/12/05/deleting-files-older-than-specified-time-with-s3cmd-and-bash/
