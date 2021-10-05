@@ -2,6 +2,51 @@
 
 Some random notes and guides for AWS.
 
+## MFA and aws-vault
+
+1. Install [aws-vault](https://github.com/99designs/aws-vault)
+1. Configure like below to user aws-vault as transparently as possible (or as transparently as I know):
+
+`~/.zshrc`:
+
+```sh
+# aws-vault shell completion
+eval "$(aws-vault --completion-script-zsh)"
+
+# aws-vault config
+export AWS_VAULT_BACKEND=secret-service
+export AWS_VAULT_PROMPT=zenity
+# or "ykman" + YKMAN_OATH_CREDENTIAL_NAME='<arn of mfa device>`
+```
+
+`~/.aws/config`:
+
+```ini
+[default]
+region=eu-west-1
+cli_follow_urlparam=false
+
+# Voltti
+[profile my-federation]
+region=eu-west-1
+credential_process=/bin/sh -c 'unset LD_LIBRARY_PATH; aws-vault exec --duration=4h --json my-federation'
+mfa_serial=<arn of mfa device>
+
+[profile my-federated]
+region=eu-west-1
+source_profile=my-federation
+# For aws-vault exec only, to allow using MFA without configuring mfa_serial for all profiles and breaking Terraform
+include_profile=my-federation
+role_arn=<fill>
+
+# Double assume example:
+[profile my-federated-app]
+region=eu-west-1
+source_profile=my-federated
+include_profile=my-federation
+role_arn=<some role assumable by my-federated>
+```
+
 ## CloudFormation
 
 ### Templates
