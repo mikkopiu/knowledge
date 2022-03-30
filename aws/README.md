@@ -59,7 +59,7 @@ Official sample templates: https://docs.aws.amazon.com/AWSCloudFormation/latest/
 
 - cfn_nag: https://github.com/stelligent/cfn_nag
   - Scan for insecure patterns in CloudFormation templates, easy to integrate into CI/CD pipelines:
-  
+
       ```sh
       gem install cfn-nag
       cfn_nag_scan --print-suppression --input-path mytemplate.yaml
@@ -115,3 +115,13 @@ done
 ```
 
 Modified from source: https://shout.setfive.com/2011/12/05/deleting-files-older-than-specified-time-with-s3cmd-and-bash/
+
+## Lambda
+
+### Create test event for CloudWatch Logs subscription filter
+
+Needs gzipping and base64-encoding and some wrapping JSON.
+
+```sh
+node create-test-event.js '{ "message": "Order updated" }'
+```
