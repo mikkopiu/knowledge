@@ -24,18 +24,10 @@
 
 ```txt
 <base search>
-| spath input=_raw path=yourobj{}.key1 output="key1"
-| spath input=_raw path=yourobj{}.key2 output="key2"
-| spath input=_raw path=yourobj{}.key3 output="key3"
-| fields - _*
-| fields key1 key2 key3
-| eval data=mvzip(mvzip(key1,key2),key3)
-| fields - key1 key2 key3
-| mvexpand data
-| eval data=split(data,",")
-| eval key1=mvindex(data,0),key2=mvindex(data,1),key3=mvindex(data,2)
-| eval _time=mvindex(data,3)
-| fields - data
+| spath yourarr{} output=yourarr ```Expand yourarr entries into separate rows via spath to allow Splunk to use streaming; avoid memory issues```
+| fields - _raw ```mvexpand will run out of memory if the _raw strings are kept```
+| mvexpand yourarr
+| spath input=yourarr
 <further processing>
 ```
 
