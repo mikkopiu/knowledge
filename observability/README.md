@@ -31,6 +31,14 @@
 <further processing>
 ```
 
+### Choropleth from IPs
+
+Assuming a field name like `requestId`
+
+```txt
+index::yourind [search index::yourind "bxss" | dedup requestId | fields requestId | format] | iplocation ip | stats count by Country| geom geo_countries allFeatures=True featureIdField=Country
+```
+
 ### Dashboards
 
 #### Create 2x2 grid of single values
