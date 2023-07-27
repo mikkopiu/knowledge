@@ -10,7 +10,7 @@ Re-encode first audio stream to AC-3 while preserving existing audio streams as-
 ffmpeg -i INFILE.mkv \
   -c copy \
   -map 0:v \
-  -map 0:s \
+  -map 0:s? \
   -map 0:a:0? -c:a:0 ac3 \
   -map 0:a:0? -c:a:1 copy \
   -map 0:a:1? -c:a:2 copy \
