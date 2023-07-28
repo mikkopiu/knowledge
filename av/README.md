@@ -100,3 +100,80 @@ Get-Job | Receive-Job
 # Remove completed jobs from the job history
 Get-Job | Remove-Job
 ```
+
+<details>
+<summary>Or alternatively, the same script modified to process a whole directory recursively and to overwrite all re-encoded files:</summary>
+
+```powershell
+$languages = @{
+    "cze" = "Czech";
+    "dan" = "Danish";
+    "eng" = "English";
+    "fin" = "Finnish";
+    "fra" = "French";
+    "fre" = "French";
+    "ind" = "Indonesian";
+    "jpn" = "Japanese";
+    "kor" = "Korean";
+    "spa" = "Spanish";
+    "swe" = "Swedish";
+    "zho" = "Chinese";
+    # Add more language code to full name mappings as needed
+}
+
+# Get the list of video files in the current working directory
+$files = Get-ChildItem -Path . -Include "*.mkv", "*.mp4", "*.avi", "*.m2ts" -Recurse
+
+# Run each iteration in parallel
+foreach ($inputFile in $files) {
+    Start-ThreadJob -ScriptBlock {
+	param ($inputFile, $languages)
+
+		# Use ffprobe to check whether the first audio track actually requires re-encoding
+		$audioCodec = & ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $inputFile.FullName
+
+		if ($audioCodec -notlike 'dts*' -and $audioCodec -notlike 'truehd*') {
+			Write-Host "First audio track not DTS, skipping. Found: $audioCodec in $inputFile"
+			return
+		}
+
+		# Form the output file name with the new extension
+		$tmpOutFile = Join-Path $inputFile.Directory.FullName ($inputFile.BaseName + ".ac3" + $inputFile.Extension)
+
+		# Run ffprobe to get the language code of the first audio stream and store the output in a variable
+		$languageCode = & ffprobe -v error -select_streams a:0 -show_entries stream_tags=language -of default=nw=1:nk=1 $inputFile.FullName
+
+		if ($languageCode -eq $null) {
+			$languageName = "Unknown"
+			Write-Host "Unknown language in: $inputFile"
+		} else {
+			# Trim any leading or trailing whitespace from the ffprobe output
+			$languageCode = $languageCode.Trim()
+			
+			# Get the full language name from the hashtable
+			$languageName = $languages[$languageCode]
+		}
+
+		# Form the new title with the language code and "AC-3"
+		$title = "$languageName AC-3"
+
+		# Run the ffmpeg command to convert audio with the variables for input and output filenames
+		ffmpeg -nostats -loglevel quiet -i $inputFile.FullName -c copy -map 0:v -map 0:s? -map 0:a:0? -c:a:0 ac3 -map 0:a:0? -c:a:1 copy -map 0:a:1? -c:a:2 copy -map 0:a:2? -c:a:3 copy -map 0:a:3? -c:a:4 copy -map 0:a:4? -c:a:5 copy -map 0:a:5? -c:a:6 copy -metadata:s:a:0 title=$title $tmpOutFile
+
+		# Overwrite existing file once re-encoding is done
+		Move-Item -Path $tmpOutFile -Destination $inputFile.FullName -Force
+
+    } -ArgumentList $inputFile, $languages
+}
+
+# Wait for all background jobs to complete
+Get-Job | Wait-Job
+
+# Retrieve the output from the background jobs (optional)
+Get-Job | Receive-Job
+
+# Remove completed jobs from the job history
+Get-Job | Remove-Job
+```
+
+</details>
