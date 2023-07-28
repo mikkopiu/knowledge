@@ -27,8 +27,8 @@ Useful for re-encoding DTS-HD etc. audio streams to AC-3 that is generally suppo
 This also preserves all existing video and text streams (=subtitles). Could be expanded to a silly amount of audio streams (as
 they're conditional to their existence), but six is generally enough.
 
-Additionally, this adds the ISO 639-2/B three-letter code (as that's what's available from `ffprobe`) + "AC-3" as the title of the re-encoded first stream, like "eng AC-3".
-Otherwise, it would keep the title from the original stream.
+Additionally, this adds "$LANGUAGE AC-3" as the title of the re-encoded first stream, like "English AC-3". This depends on a hard-coded
+mapping table of ISO 639-2/B three-letter codes that `ffprobe` outputs. Otherwise, it would keep the title from the original stream.
 
 Alternative PowerShell 7 script for processing a whole directory and outputting in Plex-desired directory format for easy copying:
 
