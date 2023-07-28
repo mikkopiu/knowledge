@@ -87,7 +87,7 @@ foreach ($inputFile in $mkvFiles) {
 
 		# Run the ffmpeg command to convert audio with the variables for input and output filenames
 
-		ffmpeg -i $inputFile.FullName -c copy -map 0:v -map 0:s? -map 0:a:0? -c:a:0 ac3 -map 0:a:0? -c:a:1 copy -map 0:a:1? -c:a:2 copy -map 0:a:2? -c:a:3 copy -map 0:a:3? -c:a:4 copy -map 0:a:4? -c:a:5 copy -map 0:a:5? -c:a:6 copy -metadata:s:a:0 title=$title $outputFile
+		ffmpeg -nostats -loglevel quiet -i $inputFile.FullName -c copy -map 0:v -map 0:s? -map 0:a:0? -c:a:0 ac3 -map 0:a:0? -c:a:1 copy -map 0:a:1? -c:a:2 copy -map 0:a:2? -c:a:3 copy -map 0:a:3? -c:a:4 copy -map 0:a:4? -c:a:5 copy -map 0:a:5? -c:a:6 copy -metadata:s:a:0 title=$title $outputFile
     } -ArgumentList $inputFile, $baseOutDir, $languages
 }
 
