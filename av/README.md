@@ -53,11 +53,11 @@ $languages = @{
     # Add more language code to full name mappings as needed
 }
 
-# Get the list of MKV files in the current directory
-$mkvFiles = Get-ChildItem -Path . -Filter "*.mkv"
+# Get the list of video files in the current directory
+$files = Get-ChildItem -Path . -Include "*.mkv", "*.mp4", "*.avi", "*.m2ts"
 
 # Run each iteration in parallel
-foreach ($inputFile in $mkvFiles) {
+foreach ($inputFile in $files) {
     Start-ThreadJob -ScriptBlock {
         param ($inputFile, $baseOutDir, $languages)
 
