@@ -127,7 +127,7 @@ $files = Get-ChildItem -Path . -Include "*.mkv", "*.mp4", "*.avi", "*.m2ts" -Rec
 # Run each iteration in parallel
 foreach ($inputFile in $files) {
     Start-ThreadJob -ScriptBlock {
-	param ($inputFile, $languages)
+        param ($inputFile, $languages)
 
 		# Use ffprobe to check whether the first audio track actually requires re-encoding
 		$audioCodec = & ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $inputFile.FullName
