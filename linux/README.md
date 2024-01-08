@@ -72,3 +72,12 @@ awk 'NR>1' /proc/net/tcp | awk '{x=strtonum("0x"substr($2,index($2,":")-2,2)); f
 nc -vz <address> <port>
 ```
 
+### Slack screen sharing fix on Wayland
+
+Working fix as of 2024-01-08, [source](https://forums.slackcommunity.com/s/question/0D53a00009BSEGACA5/when-will-slack-support-wayland-screen-sharing-does-anyone-have-workarounds-or-hacks-to-make-it-work?language=en_US)
+
+```sh
+# Install from .rpm/.deb and then
+sudo sed -i -e 's/,"WebRTCPipeWireCapturer"/,"LebRTCPipeWireCapturer"/' /usr/lib/slack/resources/app.asar
+sudo sed -i -e 's#Exec=/usr/bin/slack %U#Exec=/usr/bin/slack\ %U\ --enable-features=WebRTCPipeWireCapturer#' /usr/share/applications/slack.desktop
+```
