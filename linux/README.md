@@ -33,6 +33,10 @@ greeter-session=io.elementary.greeter
 user-session=pantheon
 ```
 
+### Automatically move windows to specific Gnome workspace
+
+Install the _Auto Move Windows_ Gnome Shell extension, see [Fedora docs](https://docs.fedoraproject.org/en-US/quick-docs/gnome-shell-extensions/).
+
 ## Snippets
 
 ### Create progress bar in shell script
