@@ -85,3 +85,23 @@ Working fix as of 2024-01-08, [source](https://forums.slackcommunity.com/s/quest
 sudo sed -i -e 's/,"WebRTCPipeWireCapturer"/,"LebRTCPipeWireCapturer"/' /usr/lib/slack/resources/app.asar
 sudo sed -i -e 's#Exec=/usr/bin/slack %U#Exec=/usr/bin/slack\ %U\ --enable-features=WebRTCPipeWireCapturer#' /usr/share/applications/slack.desktop
 ```
+
+## Fixes
+
+### Lenovo T14 G4 AMD WLAN firmware preventing suspend (Fedora 39)
+
+[Bug report](https://bugzilla.kernel.org/show_bug.cgi?id=217239)
+
+- AMD's Python script for testing suspend/s2idle issues: <https://gitlab.freedesktop.org/drm/amd/-/blob/master/scripts/amd_s2idle.py>
+- (At least in Fedora 39) Firmware are `.xz` packed files **with CRC32 checksums**: `xz --check=crc32 some.bin`
+  - With the default CRC64 checksum, Fedora will fail to load the firmware (error `-22` can be seen in `dmesg`)
+- `ath11k` firmware available in <https://github.com/kvalo/ath11k-firmware/tree/master/WCN6855/hw2.0/1.1>
+  - Version `.37` seems to be the first one to fix the issue
+  - Put in `/lib/firmware/ath11k/WCN6855/hw2.0/`
+ 
+To fix (until new firmware is available via `fwupdmgr`:
+
+1. Back up existing files from `/lib/firmware/ath11k/WCN6855/hw2.0/`
+2. Download version `.37`'s `amss.bin` and `m3.bin` or newer from link above into the above directory
+3. `xz --check=crc32 *.bin`
+4. Reboot
