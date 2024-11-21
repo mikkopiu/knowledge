@@ -31,7 +31,7 @@ Additionally, this adds "$LANGUAGE AC-3" as the title of the re-encoded first st
 mapping table of ISO 639-2/B three-letter codes that `ffprobe` outputs. Otherwise, it would keep the title from the original stream.
 
 <details>
-<summary>Alternative PowerShell 7 script for processing a whole directory recursively and to overwrite all re-encoded files:</summary>
+<summary>Alternative PowerShell 7 script for processing a whole directory recursively and to overwrite all re-encoded files (recommend creating a `.plexignore` rule for `tmp-encode-*`)</summary>
 
 ```powershell
 $languages = @{
@@ -69,7 +69,7 @@ foreach ($inputFile in $files) {
 		Write-Host "PROCESSING: $audioCodec in $inputFile"
 
 		# Form the output file name with the new extension
-		$tmpOutFile = Join-Path $inputFile.Directory.FullName ($inputFile.BaseName + ".ac3" + $inputFile.Extension)
+		$tmpOutFile = Join-Path $inputFile.Directory.FullName ("tmp-encode-" + $inputFile.BaseName + $inputFile.Extension)
 
 		# Run ffprobe to get the language code of the first audio stream and store the output in a variable
 		$languageCode = & ffprobe -v error -select_streams a:0 -show_entries stream_tags=language -of default=nw=1:nk=1 $inputFile.FullName
