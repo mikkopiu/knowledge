@@ -125,3 +125,16 @@ Needs gzipping and base64-encoding and some wrapping JSON.
 ```sh
 node create-test-event.js '{ "message": "Order updated" }'
 ```
+
+## ECS
+
+### Wait for deployment when using deployment circuit breakers with automatic rollbacks
+
+```sh
+npm i --save @aws-sdk/client-ecs arg
+./wait-for-ecs-deploy-circuit-breaker.ts" \
+  --cluster my-cluster \
+  --service api-gateway-service \
+  --timeout-seconds 600 \
+  --version "$SERVICE_VERSION"
+```
